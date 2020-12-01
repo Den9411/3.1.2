@@ -48,12 +48,22 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
+    public User findByEmail (String email) {
+        List<User> users = findAll();
+        for (User user: users) {
+            if (user.getEmail().equals(email))
+                return user;
+        }
+        return null;
+    }
+
 
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        User user = findByUsername(s);
+//        User user = findByUsername(s);
+        User user = findByEmail(s);
         if(user == null) {
             throw new UsernameNotFoundException(String.format("User '%s' not found", s));
         }
