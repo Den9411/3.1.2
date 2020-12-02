@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.nasekin.bootstrap.model.Role;
 import ru.nasekin.bootstrap.model.User;
+import ru.nasekin.bootstrap.repository.RoleRepository;
+import ru.nasekin.bootstrap.service.RoleService;
 import ru.nasekin.bootstrap.service.UserService;
 
 import java.util.*;
@@ -18,10 +20,16 @@ import java.util.*;
 public class AdminController {
 
     private UserService userService;
+    private RoleService roleService;
 
     @Autowired
     private void setUserService(UserService userService) {
         this.userService = userService;
+    }
+
+    @Autowired
+    private void setRoleService(RoleService roleService) {
+        this.roleService = roleService;
     }
 
     @GetMapping
@@ -38,10 +46,12 @@ public class AdminController {
     public String createUser(User user, @RequestParam("role") String[] roles){
         for(String role: roles) {
             if(role.toLowerCase().contains("admin")){
-                user.setRoles(Set.of(new Role(2L, "ROLE_ADMIN", Set.of(user))));
+//                user.setRoles(Set.of(new Role(2L, "ROLE_ADMIN", Set.of(user))));
+                user.setRoles(Set.of(roleService.findByRole("ROLE_ADMIN")));
             }
             if(role.toLowerCase().contains("user")){
-                user.setRoles(Set.of(new Role(1L, "ROLE_USER", Set.of(user))));
+//                user.setRoles(Set.of(new Role(1L, "ROLE_USER", Set.of(user))));
+                user.setRoles(Set.of(roleService.findByRole("ROLE_USER")));
             }
         }
         userService.saveUser(user);
