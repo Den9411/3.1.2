@@ -4,9 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.nasekin.bootstrap.model.Role;
-import ru.nasekin.bootstrap.model.User;
 import ru.nasekin.bootstrap.repository.RoleRepository;
-import ru.nasekin.bootstrap.repository.UserRepository;
 
 import java.util.List;
 

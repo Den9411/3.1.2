@@ -44,14 +44,29 @@ public class AdminController {
 
     @PostMapping
     public String createUser(User user, @RequestParam("role") String[] roles){
-        for(String role: roles) {
-            if(role.toLowerCase().contains("admin")){
+        Long id = user.getId();
+        if (id==null) {
+            for (String role : roles) {
+                if (role.toLowerCase().contains("admin")) {
 //                user.setRoles(Set.of(new Role(2L, "ROLE_ADMIN", Set.of(user))));
-                user.setRoles(Set.of(roleService.findByRole("ROLE_ADMIN")));
-            }
-            if(role.toLowerCase().contains("user")){
+                    user.setRoles(Set.of(roleService.findByRole("ROLE_ADMIN")));
+                }
+                if (role.toLowerCase().contains("user")) {
 //                user.setRoles(Set.of(new Role(1L, "ROLE_USER", Set.of(user))));
-                user.setRoles(Set.of(roleService.findByRole("ROLE_USER")));
+                    user.setRoles(Set.of(roleService.findByRole("ROLE_USER")));
+                }
+            }
+        } else {
+            Set<Role> userRoles = userService.findById(id).getRoles();
+            for (String role : roles) {
+                if (role.toLowerCase().contains("admin")) {
+                    userRoles.add(roleService.findByRole("ROLE_ADMIN"));
+                    user.setRoles(userRoles);
+                }
+                if (role.toLowerCase().contains("user")) {
+                    userRoles.add(roleService.findByRole("ROLE_USER"));
+                    user.setRoles(userRoles);
+                }
             }
         }
         userService.saveUser(user);
