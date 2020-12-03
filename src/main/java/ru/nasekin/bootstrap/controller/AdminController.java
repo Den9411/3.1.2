@@ -52,20 +52,31 @@ public class AdminController {
                     user.setRoles(Set.of(roleService.findByRole("ROLE_ADMIN")));
                 }
                 if (role.toLowerCase().contains("user")) {
-//                user.setRoles(Set.of(new Role(1L, "ROLE_USER", Set.of(user))));
                     user.setRoles(Set.of(roleService.findByRole("ROLE_USER")));
                 }
             }
         } else {
             Set<Role> userRoles = userService.findById(id).getRoles();
-            for (String role : roles) {
-                if (role.toLowerCase().contains("admin")) {
-                    userRoles.add(roleService.findByRole("ROLE_ADMIN"));
-                    user.setRoles(userRoles);
+            if (userRoles.size()!=2) {
+                for (String role : roles) {
+                    if (role.toLowerCase().contains("admin")) {
+                        userRoles.add(roleService.findByRole("ROLE_ADMIN"));
+                        user.setRoles(userRoles);
+                    }
+                    if (role.toLowerCase().contains("user")) {
+                        userRoles.add(roleService.findByRole("ROLE_USER"));
+                        user.setRoles(userRoles);
+                    }
                 }
-                if (role.toLowerCase().contains("user")) {
-                    userRoles.add(roleService.findByRole("ROLE_USER"));
-                    user.setRoles(userRoles);
+            } else {
+                for (String role : roles) {
+                    if (role.toLowerCase().contains("admin")) {
+//                user.setRoles(Set.of(new Role(2L, "ROLE_ADMIN", Set.of(user))));
+                        user.setRoles(Set.of(roleService.findByRole("ROLE_ADMIN")));
+                    }
+                    if (role.toLowerCase().contains("user")) {
+                        user.setRoles(Set.of(roleService.findByRole("ROLE_USER")));
+                    }
                 }
             }
         }
